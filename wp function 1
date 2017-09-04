@@ -1,0 +1,268 @@
+1)
+<?php if ( has_nav_menu( 'top-menu', 'responsive' ) ) {
+    wp_nav_menu( array(
+        'container'      => '',
+        'fallback_cb'    => false,
+        'menu_class'     => 'top-menu',
+        'theme_location' => 'top-menu'
+    ) );
+}
+
+2)
+get_sidebar( 'top' );
+its function load ( sidebar-top.php ) 
+
+
+3)
+get_template_part( 'loop-nav', get_post_type() );
+its function load ( loop-nav.php,  loop-nav-page.php )
+
+
+
+4)
+<?php if ( is_active_sidebar( 'top-widget' )  ) : ?>
+    <?php dynamic_sidebar( 'top-widget' ); ?>
+<?php endif; //end of top-widget ?>
+
+
+5)
+locate_template( 'single.php', true );
+
+
+6)
+
+query_posts( array( 'post_type' => 'post','posts_per_page' => 4, 'paged' => get_query_var( 'paged' ) ) );
+       
+        while ( have_posts() ) : the_post(); ?>
+        <?php the_title(); ?>
+        <?php the_content(); ?>
+    <?php endwhile?>
+   
+
+    <?php wp_pagenavi();
+
+
+   
+7)
+$menu_items = get_nav_menu_locations();
+pr($menu_items);
+$primaryNav = wp_get_nav_menu_items(4);
+pr($primaryNav);
+
+
+
+8)
+
+
+if(function_exists('register_sidebar')) {
+    register_sidebar(array(
+        'name' => 'Widgetized Area',
+        'id'   => 'katuhu',
+        'description'   => 'This is a widgetized area.',
+        'before_widget' => '<div id="%1$s" class="widget %2$s">',
+        'after_widget'  => '</div>',
+        'before_title'  => '<h4>',
+        'after_title'   => '</h4>'
+    ));
+    register_sidebar(array(
+        'name' => 'geek assured',
+        'id'   => 'slider',
+        'description'   => 'This is a slider area.',
+        'before_widget' => '<div id="%1$s" class="widget %2$s">',
+        'after_widget'  => '</div>',
+        'before_title'  => '<h1 class="calender">',
+        'after_title'   => '</h1>'
+    ));
+
+}
+
+
+9)
+
+/*
+Plugin Name: Manage Theme   
+Plugin URI: http://manageTheme.com
+Description: Loren dummy text
+Author:loren ipsum
+Author URI: http://manageTheme.com
+Version: 1.2
+*/
+
+10)
+
+/* Template Name: custome textmp */
+
+
+11)
+enable feature image in post
+add_theme_support( 'post-thumbnails' );
+
+12)
+
+//medium , medium_large , large  , full
+if ( has_post_thumbnail() ) {
+    echo the_post_thumbnail('thumbnail');
+}
+
+13 )
+
+/* create taxonomi  */
+
+
+//hook into the init action and call create_book_taxonomies when it fires
+add_action( 'init', 'create_topics_hierarchical_taxonomy', 0 );
+
+//create a custom taxonomy name it topics for your posts
+
+function create_topics_hierarchical_taxonomy() {
+
+// Add new taxonomy, make it hierarchical like categories
+//first do the translations part for GUI
+
+  $labels = array(
+    'name' => _x( 'Topics', 'taxonomy general name' ),
+    'singular_name' => _x( 'Topic', 'taxonomy singular name' ),
+    'search_items' =>  __( 'Search Topics' ),
+    'all_items' => __( 'All Topics' ),
+    'parent_item' => __( 'Parent Topic' ),
+    'parent_item_colon' => __( 'Parent Topic:' ),
+    'edit_item' => __( 'Edit Topic' ),
+    'update_item' => __( 'Update Topic' ),
+    'add_new_item' => __( 'Add New Topic' ),
+    'new_item_name' => __( 'New Topic Name' ),
+    'menu_name' => __( 'Topics' ),
+  );    
+
+// Now register the taxonomy
+
+  register_taxonomy('topics',array('post'), array(
+    'hierarchical' => true,
+    'labels' => $labels,
+    'show_ui' => true,
+    'show_admin_column' => true,
+    'query_var' => true,
+    'rewrite' => array( 'slug' => 'topic' ),
+  ));
+
+}
+
+
+
+14)
+//Create custome post type
+
+    function create_test_custom_post() {
+        register_post_type( 'new_custom_post', array(
+        'labels' => array(
+            'name' => __( 'Custom Posts' ),
+                'singular_name' => __( 'Custom Post' )
+            ),
+        'public' => true,
+        'supports' => array( 'title', 'editor', 'custom-fields' ),
+        )
+    );
+    }
+    add_action( 'init', 'create_test_custom_post' );
+
+15)
+
+
+/* enable php in text widget */ 
+
+function add_php_text($text) {
+ if (strpos($text, '<' . '?') !== false) {
+ ob_start();
+ eval('?' . '>' . $text);
+ $text = ob_get_contents();
+ ob_end_clean();
+ }
+ return $text;
+}
+
+add_filter('widget_text', 'add_php_text', 99);
+   
+   
+16)    
+
+Css Zoom event
+   
+.img-thumbnail a:hover img {
+    transition: all 0.7s ease-in-out;
+    transform: scale(1.5);
+}
+
+
+
+17)
+    Add this code in wp function file
+
+     add_image_size( 'custom-size', 200, 180 ); // 220 pixels wide by 180 pixels tall, hard crop mode
+
+     Display Image
+
+    <?php the_post_thumbnail('custom-size'); ?>    
+
+18)
+Add New Navigation Menus to Your Theme
+
+
+function wpb_custom_new_menu() {
+  register_nav_menu('my-custom-menu',__( 'My Custom Menu' ));
+}
+add_action( 'init', 'wpb_custom_new_menu' );
+
+
+
+
+19)
+
+Add Author Profile Fields
+
+function wpb_new_contactmethods( $contactmethods ) {
+// Add Twitter
+$contactmethods['twitter'] = 'Twitter';
+//add Facebook
+$contactmethods['facebook'] = 'Facebook';
+
+return $contactmethods;
+}
+add_filter('user_contactmethods','wpb_new_contactmethods',10,1);
+
+20)
+
+Hide Login Errors in WordPress
+
+function no_wordpress_errors(){
+  return 'Something is wrong!';
+}
+add_filter( 'login_errors', 'no_wordpress_errors' );
+
+
+
+21)
+
+
+add_filter('widget_text','do_shortcode');
+
+
+
+
+22)
+Automatically Link Featured Images to Posts
+
+
+function wpb_autolink_featured_images( $html, $post_id, $post_image_id ) {
+
+If (! is_singular()) {
+   
+$html = '<a href="' . get_permalink( $post_id ) . '" title="' . esc_attr( get_the_title( $post_id ) ) . '">' . $html . '</a>';
+return $html;
+
+} else {
+
+return $html;
+
+}
+
+}
+add_filter( 'post_thumbnail_html', 'wpb_autolink_featured_images', 10, 3 );
