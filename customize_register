@@ -1,0 +1,36 @@
+  function my_customize_register( $wp_customize ) {
+        /* Just use the $wp_customize object and create a section or
+use a built-in
+           section. */
+        $wp_customize->add_section(
+            'my_section',
+            array(
+                'title'       => 'My Section',
+                'priority'    => 30,
+            )
+        );
+        /* Now you can add your settings ... */
+        $wp_customize->add_setting(
+            'my_options[my_first_option]',
+            array(
+                'default'    => '',
+                'type'       => 'option',
+                'capability' => 'edit_theme_options',
+            )
+        );
+        /* ... and link controls to these settings. */
+        $wp_customize->add_control(
+            'my_first_option',
+            array(
+                'label'      => 'My First Option',
+                'section'    => 'my_section',
+                'settings'   => 'my_options[my_first_option]',
+            )
+        );
+
+    }
+    add_action( 'customize_register' , 'my_customize_register' );
+............................
+
+    $my_theme_settings = get_option( 'my_options' );
+    print_r($my_theme_settings);
